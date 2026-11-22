@@ -1,0 +1,14 @@
+{% extends 'base.html' %}{% set title='Dashboard' %}{% set subtitle='Overview of your workforce and payroll' %}
+{% block content %}
+<section class="stats-grid">
+  <div class="stat-card"><div class="stat-top"><span>Total Employees</span><span class="stat-icon blue">♙</span></div><strong>{{ total_employees }}</strong><small>Registered employees</small></div>
+  <div class="stat-card"><div class="stat-top"><span>Present Today</span><span class="stat-icon green">✓</span></div><strong>{{ present_today }}</strong><small>Attendance marked today</small></div>
+  <div class="stat-card"><div class="stat-top"><span>Pending Leaves</span><span class="stat-icon orange">▤</span></div><strong>{{ pending_leaves }}</strong><small>Awaiting decision</small></div>
+  <div class="stat-card"><div class="stat-top"><span>Monthly Payroll</span><span class="stat-icon purple">₹</span></div><strong>₹{{ "{:,.2f}".format(monthly_payroll|float) }}</strong><small>Current month net payroll</small></div>
+</section>
+<section class="panel"><div class="panel-heading"><div><h2>Employee Overview</h2><p>Current employee directory</p></div><a class="button" href="{{ url_for('employees_page') }}">View Employees →</a></div>
+<div class="table-wrap"><table><thead><tr><th>ID</th><th>Employee</th><th>Department</th><th>Designation</th><th>Status</th></tr></thead><tbody>
+{% for e in employees %}<tr><td>#{{ e.employee_id }}</td><td><strong>{{ e.full_name }}</strong></td><td>{{ e.department }}</td><td>{{ e.designation }}</td><td><span class="badge {{ 'green' if e.employment_status=='Active' else 'gray' }}">{{ e.employment_status }}</span></td></tr>{% else %}<tr><td colspan="5" class="empty">No employees found.</td></tr>{% endfor %}
+</tbody></table></div></section>
+<section class="quick-links"><a class="quick-card" href="{{ url_for('attendance_page') }}"><b>Mark / View Attendance</b><span>Manage daily attendance →</span></a><a class="quick-card" href="{{ url_for('leaves_page') }}"><b>Review Leave Requests</b><span>Approve or reject requests →</span></a><a class="quick-card" href="{{ url_for('payroll_page') }}"><b>View Payroll</b><span>Check salary records →</span></a></section>
+{% endblock %}
